@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Card from "./components/Card";
 import AdminView from "./components/AdminView";
 import PlayerView from "./components/PlayerView";
+import "./types/Types";
 
 enum UserView {
   Nobody,
@@ -12,14 +13,15 @@ enum UserView {
 }
 
 function App() {
-  let userId: string | null = localStorage.getItem("user_id");
-
-  const [user, setUser] = useState("");
+  const [userId, setUserId] = useState<string | null>(
+    localStorage.getItem("user_id")
+  );
+  const [user, setUser] = useState<UserDetail | null>();
   const [userView, setUserView] = useState(UserView.Nobody);
 
   const deleteLocalStorage = () => {
     localStorage.removeItem("user_id");
-    setUser("");
+    setUser({});
   };
 
   const fetchUserData = () => {
@@ -33,7 +35,13 @@ function App() {
           return response.json();
         })
         .then((data) => {
-          setUser(data[0].Name);
+          let userType: UserDetail = {
+            ID: data[0].ID,
+            Name: data[0].Name,
+            Balance: data[0].Balance,
+          };
+
+          setUser(userType);
         });
     }
   };
@@ -51,13 +59,13 @@ function App() {
       setUserView(UserView.Player);
       fetchUserData();
     }
-  }, []);
+  }, [userId]);
 
   if (userView === UserView.Nobody) {
     return (
       <>
         <Header
-          userName={user}
+          userName=""
           onButtonClick={() => setUserView(UserView.Nobody)}
         />
         <div className="div_for_cards">
@@ -65,14 +73,14 @@ function App() {
             heading="Üzemeltető"
             onClickCard={() => {
               localStorage.setItem("user_id", "1");
-              setUser("Üzemeltető");
+              setUserId("1");
               setUserView(UserView.Admin);
             }}
           ></Card>
           <Card
             heading="Játékos"
             onClickCard={() => {
-              setUser("");
+              setUser({});
               setUserView(UserView.Player);
             }}
           ></Card>
@@ -83,20 +91,28 @@ function App() {
     return (
       <>
         <Header
-          userName={user}
+          userName={user?.Name ?? ""}
           onButtonClick={() => {
             setUserView(UserView.Nobody);
             deleteLocalStorage();
           }}
         />
-        <PlayerView />
+        <PlayerView
+          userId={user?.ID ?? 0}
+          balance={user?.Balance ?? 0}
+          userName={user?.Name ?? ""}
+          onButtonClick={(item) => {
+            localStorage.setItem("user_id", `${item.ID}`);
+            setUserId(`${item.ID}`);
+          }}
+        />
       </>
     );
   } else if (userView === UserView.Admin) {
     return (
       <>
         <Header
-          userName={user}
+          userName={user?.Name ?? ""}
           onButtonClick={() => {
             setUserView(UserView.Nobody);
             deleteLocalStorage();

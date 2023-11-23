@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { HtmlHTMLAttributes, useEffect, useState } from "react";
 import "./PlayerView.css";
+import "../types/Types";
 
-type UserDetail = {
-  ID: number;
-  Name: string;
-  Balance: number;
-};
+interface Props {
+  userId: number;
+  userName: string;
+  balance: number;
+  onButtonClick: (item: UserDetail) => void;
+}
 
-function PlayerView() {
+function PlayerView({ userId, userName, balance, onButtonClick }: Props) {
   let userDetailList: UserDetail[] = [];
   const [userList, setUserList] = useState(userDetailList);
+  const [newUserName, setNewUserName] = useState("");
+  const [isUserSelected, setIsUserSelected] = useState(false);
 
   const fetchData = () => {
     fetch("https://lottokeeperbackend.johannesdemissi.repl.co/all_users")
@@ -17,24 +21,72 @@ function PlayerView() {
         return response.json();
       })
       .then((data) => {
-        data.remo;
         setUserList(data.slice(1));
       });
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (userId > 0) {
+      setIsUserSelected(true);
+      console.log(userId);
+    } else {
+      fetchData();
+      console.log(userId);
+    }
+  }, [userId]);
 
-  const createPlayer = () => {};
+  const handleInputChange = (event: any) => {
+    setNewUserName(event.target.value);
+  };
+  const createPlayer = () => {
+    if (newUserName != "") {
+      console.log("Create: " + newUserName);
+
+      const input = document.getElementById("nameInput") as HTMLInputElement;
+      if (input != null) {
+        input.value = "";
+      }
+
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("name", newUserName);
+      myHeaders.append("balance", "10000");
+
+      const options: RequestInit = {
+        method: "POST",
+        headers: myHeaders,
+      };
+
+      fetch(
+        "https://lottokeeperbackend.johannesdemissi.repl.co/newuser",
+        options
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Success:", data);
+          // Handle the response data here
+          fetchData();
+          setNewUserName("");
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          // Handle errors here
+        });
+    }
+  };
 
   return (
     <>
-      {userList.length === 0 && (
+      {isUserSelected === false && (
         <div className="player-view-div">
-          <h1>Új játékos létrehozása</h1>
+          <h1>Új játékos</h1>
           <br></br>
-          <form>
+          <form className="width400 ">
             <div className="mb-3">
               <label htmlFor="nameInput" className="form-label">
                 Teljes Név
@@ -43,33 +95,42 @@ function PlayerView() {
                 type="text"
                 className="form-control"
                 id="nameInput"
+                name="nameInput"
+                onChange={handleInputChange}
               ></input>
               <br />
-              <button type="button" className="btn btn-primary">
-                Mentés
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={createPlayer}
+              >
+                Létrehozás
               </button>
             </div>
           </form>
+          <br></br>
+          {userList.length > 0 && (
+            <div className="player-view-div">
+              <h1>Válassz játékost</h1>
+              <ul className="list-group width400">
+                {userList.map((item) => (
+                  <li
+                    className="list-group-item"
+                    key={item.ID}
+                    onClick={() => {
+                      console.log(item.Name + " + " + item.ID);
+                      onButtonClick(item);
+                    }}
+                  >
+                    {item.Name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       )}
-      {userList.length > 0 && (
-        <div className="player-view-div">
-          <h1>Játékosok</h1>
-          <ul className="list-group">
-            {userList.map((item, index) => (
-              <li
-                className="list-group-item"
-                key={item.ID}
-                onClick={() => {
-                  console.log(item.Name);
-                }}
-              >
-                {item.Name}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {isUserSelected && <h1>{userName}</h1>}
     </>
   );
 }
