@@ -66,6 +66,7 @@ function App() {
       <>
         <Header
           userName=""
+          balance={0}
           onButtonClick={() => setUserView(UserView.Nobody)}
         />
         <div className="div_for_cards">
@@ -92,6 +93,7 @@ function App() {
       <>
         <Header
           userName={user?.Name ?? ""}
+          balance={user?.Balance ?? 0}
           onButtonClick={() => {
             setUserView(UserView.Nobody);
             deleteLocalStorage();
@@ -113,6 +115,7 @@ function App() {
       <>
         <Header
           userName={user?.Name ?? ""}
+          balance={user?.Balance ?? 0}
           onButtonClick={() => {
             setUserView(UserView.Nobody);
             deleteLocalStorage();

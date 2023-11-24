@@ -1,6 +1,7 @@
 import React, { HtmlHTMLAttributes, useEffect, useState } from "react";
 import "./PlayerView.css";
 import "../types/Types";
+import Card from "./Card";
 
 interface Props {
   userId: number;
@@ -130,7 +131,28 @@ function PlayerView({ userId, userName, balance, onButtonClick }: Props) {
           )}
         </div>
       )}
-      {isUserSelected && <h1>{userName}</h1>}
+      {isUserSelected && (
+        <div className="div_for_cards">
+          <Card
+            heading="Fogadás"
+            onClickCard={() => {
+              console.log("Fogadás clicked");
+            }}
+          ></Card>
+          <Card
+            heading="Szelvényeim"
+            onClickCard={() => {
+              console.log("Szelvényeim clicked");
+            }}
+          ></Card>
+          <Card
+            heading="Nyereményeim"
+            onClickCard={() => {
+              console.log("Nyereményeim clicked");
+            }}
+          ></Card>
+        </div>
+      )}
     </>
   );
 }

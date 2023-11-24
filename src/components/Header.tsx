@@ -1,16 +1,21 @@
 interface Props {
   userName: string;
+  balance: number;
   onButtonClick: (item: any) => void;
 }
 
-function Header({ userName, onButtonClick }: Props) {
+function Header({ userName, balance, onButtonClick }: Props) {
   return (
     <nav className="navbar bg-body-tertiary">
       <div className="container-fluid">
         <a className="navbar-brand" href="/">
           Lottokeeper
         </a>
-        <span>{userName}</span>
+        {userName != "" && (
+          <span>
+            {userName} - ({balance} akcse)
+          </span>
+        )}
         <button
           type="button"
           className="btn btn-primary"
