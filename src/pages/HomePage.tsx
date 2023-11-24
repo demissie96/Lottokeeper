@@ -23,6 +23,11 @@ function HomePage() {
     setUser({});
   };
 
+  const changeUser = () => {
+    setUserView(UserView.Nobody);
+    deleteLocalStorage();
+  };
+
   const fetchUserData = () => {
     if (userId !== null) {
       fetch("https://lottokeeperbackend.johannesdemissi.repl.co/user", {
@@ -63,11 +68,7 @@ function HomePage() {
   if (userView === UserView.Nobody) {
     return (
       <>
-        <Header
-          userName=""
-          balance={0}
-          onButtonClick={() => setUserView(UserView.Nobody)}
-        />
+        <Header userName="" balance={0} onButtonClick={() => changeUser()} />
         <div className="div_for_cards">
           <Card
             heading="Üzemeltető"
@@ -94,8 +95,7 @@ function HomePage() {
           userName={user?.Name ?? ""}
           balance={user?.Balance ?? 0}
           onButtonClick={() => {
-            setUserView(UserView.Nobody);
-            deleteLocalStorage();
+            changeUser();
           }}
         />
         <PlayerView
@@ -116,8 +116,7 @@ function HomePage() {
           userName={user?.Name ?? ""}
           balance={user?.Balance ?? 0}
           onButtonClick={() => {
-            setUserView(UserView.Nobody);
-            deleteLocalStorage();
+            changeUser();
           }}
         />
         <AdminView />

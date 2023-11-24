@@ -13,15 +13,12 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/fogadasok" element={<AdminAllBetsPage />} />
-        <Route
-          path="/fogadas-szimulacio"
-          element={<AdminBetSimulationPage />}
-        />
-        <Route path="/sorsolas" element={<AdminDrawingPage />} />
-        <Route path="/szelvenyeim" element={<PlayerBettingHistoryPage />} />
-        <Route path="/fogadasaim" element={<PlayerBettingPage />} />
-        <Route path="/nyeremenyeim" element={<PlayerPrizesPage />} />
+        <Route path="fogadasok" element={<AdminAllBetsPage />} />
+        <Route path="fogadas-szimulacio" element={<AdminBetSimulationPage />} />
+        <Route path="sorsolas" element={<AdminDrawingPage />} />
+        <Route path="szelvenyeim" element={<PlayerBettingHistoryPage />} />
+        <Route path="fogadasaim" element={<PlayerBettingPage />} />
+        <Route path="nyeremenyeim" element={<PlayerPrizesPage />} />
       </Routes>
     </BrowserRouter>
   );

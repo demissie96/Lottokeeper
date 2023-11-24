@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./PlayerView.css";
 import "../types/Types";
 import Card from "./Card";
@@ -139,7 +139,7 @@ function PlayerView({ userId, userName, balance, onButtonClick }: Props) {
           <Card
             heading="Fogadás"
             onClickCard={() => {
-              navigate("/fogadasaim");
+              navigate(`/fogadasaim`);
             }}
           ></Card>
           <Card
