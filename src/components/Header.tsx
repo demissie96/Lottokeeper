@@ -1,3 +1,5 @@
+import { Outlet, Link } from "react-router-dom";
+
 interface Props {
   userName: string;
   balance: number;
@@ -8,9 +10,9 @@ function Header({ userName, balance, onButtonClick }: Props) {
   return (
     <nav className="navbar bg-body-tertiary">
       <div className="container-fluid">
-        <a className="navbar-brand" href="/">
+        <Link className="navbar-brand" to="/">
           Lottokeeper
-        </a>
+        </Link>
         {userName != "" && (
           <span>
             {userName} - ({balance} akcse)

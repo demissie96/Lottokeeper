@@ -1,4 +1,5 @@
-import React, { HtmlHTMLAttributes, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./PlayerView.css";
 import "../types/Types";
 import Card from "./Card";
@@ -15,6 +16,8 @@ function PlayerView({ userId, userName, balance, onButtonClick }: Props) {
   const [userList, setUserList] = useState(userDetailList);
   const [newUserName, setNewUserName] = useState("");
   const [isUserSelected, setIsUserSelected] = useState(false);
+
+  const navigate = useNavigate();
 
   const fetchData = () => {
     fetch("https://lottokeeperbackend.johannesdemissi.repl.co/all_users")
@@ -136,19 +139,19 @@ function PlayerView({ userId, userName, balance, onButtonClick }: Props) {
           <Card
             heading="Fogadás"
             onClickCard={() => {
-              console.log("Fogadás clicked");
+              navigate("/fogadasaim");
             }}
           ></Card>
           <Card
             heading="Szelvényeim"
             onClickCard={() => {
-              console.log("Szelvényeim clicked");
+              navigate("/szelvenyeim");
             }}
           ></Card>
           <Card
             heading="Nyereményeim"
             onClickCard={() => {
-              console.log("Nyereményeim clicked");
+              navigate("/nyeremenyeim");
             }}
           ></Card>
         </div>
