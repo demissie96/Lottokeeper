@@ -7,3 +7,14 @@
   align-items: center;
   align-content: center;
 }
+
+.width400 {
+  width: 400px;
+  text-align: center;
+  margin: auto;
+}
+
+.number-checkbox {
+  height: 38px;
+  width: 44px;
+}
