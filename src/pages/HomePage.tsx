@@ -76,6 +76,7 @@ function HomePage() {
               localStorage.setItem("user_id", "1");
               setUserId("1");
               setUserView(UserView.Admin);
+              window.location.reload();
             }}
           ></Card>
           <Card

@@ -71,11 +71,11 @@ function PlayerBettingPage() {
 
   const takeABet = async () => {
     if (userId === null) {
-      alert("Játékos nincs bejelentkezve!");
+      alert("❌ Játékos nincs bejelentkezve!");
       return;
     }
     if (balance === null || Number(balance) < 500) {
-      alert("Nincs elég akcséd!");
+      alert("❌ Nincs elég akcséd!");
       return;
     }
 
@@ -110,14 +110,14 @@ function PlayerBettingPage() {
         console.log("Success:", data);
         balance = (Number(balance) - 500).toString();
         setUserBalance(balance);
-        alert("Sikeres fogadás!");
+        alert("✅ Sikeres fogadás!");
         navigate(
           `/fogadasaim?userId=${userId}&userName=${userName}&balance=${balance}`
         );
       })
       .catch((error) => {
         console.error("Error:", error);
-        alert("A fogadás sikertelen volt!");
+        alert("❌ A fogadás sikertelen volt!");
       });
     window.location.reload();
   };
