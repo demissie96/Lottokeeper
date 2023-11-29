@@ -87,8 +87,6 @@ function PlayerBettingPage() {
     myHeaders.append("num3", selectedNumbers[2].toString());
     myHeaders.append("num4", selectedNumbers[3].toString());
     myHeaders.append("num5", selectedNumbers[4].toString());
-    // myHeaders.append("player_balance", (Number(balance) - 500).toString());
-    // myHeaders.append("admin_balance", selectedNumbers[4].toString());
 
     const options: RequestInit = {
       method: "POST",
