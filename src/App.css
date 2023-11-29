@@ -14,6 +14,11 @@
   margin: auto;
 }
 
+.width300 {
+  width: 300px;
+  margin: auto;
+}
+
 .number-checkbox {
   height: 38px;
   width: 44px;

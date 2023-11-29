@@ -7,13 +7,14 @@ let selectedNumbersList: Number[] = [];
 function PlayerBettingPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const params = new URLSearchParams(location.search);
 
+  const params = new URLSearchParams(location.search);
   const userId = params.get("userId");
   const userName = params.get("userName");
-  const balance = params.get("balance");
+  let balance = params.get("balance");
 
   const [selectedNumbers, setSelectedNumbers] = useState(selectedNumbersList);
+  const [userBalance, setUserBalance] = useState(balance);
 
   const generateCheckboxes = () => {
     const checkboxes = [];
@@ -73,6 +74,10 @@ function PlayerBettingPage() {
       alert("Játékos nincs bejelentkezve!");
       return;
     }
+    if (balance === null || Number(balance) < 500) {
+      alert("Nincs elég akcséd!");
+      return;
+    }
 
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -82,6 +87,8 @@ function PlayerBettingPage() {
     myHeaders.append("num3", selectedNumbers[2].toString());
     myHeaders.append("num4", selectedNumbers[3].toString());
     myHeaders.append("num5", selectedNumbers[4].toString());
+    // myHeaders.append("player_balance", (Number(balance) - 500).toString());
+    // myHeaders.append("admin_balance", selectedNumbers[4].toString());
 
     const options: RequestInit = {
       method: "POST",
@@ -101,7 +108,12 @@ function PlayerBettingPage() {
       })
       .then((data) => {
         console.log("Success:", data);
+        balance = (Number(balance) - 500).toString();
+        setUserBalance(balance);
         alert("Sikeres fogadás!");
+        navigate(
+          `/fogadasaim?userId=${userId}&userName=${userName}&balance=${balance}`
+        );
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -118,9 +130,8 @@ function PlayerBettingPage() {
     <>
       <Header
         userName={userName ?? ""}
-        balance={Number(balance)}
+        balance={Number(userBalance)}
         onButtonClick={() => {
-          console.log(`mivan mennyé má user id: ${userId}`);
           localStorage.removeItem("user_id");
           navigate("/");
         }}
