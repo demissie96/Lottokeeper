@@ -9,6 +9,7 @@ function AdminDrawingPage() {
   const navigate = useNavigate();
 
   const params = new URLSearchParams(location.search);
+  const userName = params.get("userName");
   const balance = params.get("balance");
 
   // Generate random numbers
@@ -171,63 +172,74 @@ function AdminDrawingPage() {
       totalHitCount = totalHitCount + element.Hit;
     });
 
-    const hitUnitPrize: number = Number(balance) / 3 / totalHitCount;
+    const hitUnitPrize: number = Math.floor(
+      Number(balance) / 2 / totalHitCount
+    );
     let idHitRewardList: Array<IDHitRewardData> = [];
+
+    let totalWinPrizes: number = 0;
 
     idHitList.forEach((element) => {
       const idHitReward: IDHitRewardData = {
         ID: element.ID,
         Hit: element.Hit,
-        Reward: element.Hit * hitUnitPrize,
+        Reward: element.Hit > 1 ? element.Hit * hitUnitPrize : 0,
       };
       idHitRewardList.push(idHitReward);
+
+      if (idHitReward.Reward > 0) {
+        totalWinPrizes += idHitReward.Reward;
+      }
     });
 
     let updateQuery: string = "";
 
     idHitRewardList.forEach((element) => {
       updateQuery += `UPDATE Bettings SET Hit = ${element.Hit}, Reward = ${element.Reward} WHERE ID = ${element.ID}; `;
+      updateQuery += `UPDATE Users SET Balance = Balance + ${element.Reward} WHERE ID = ${element.ID}; `;
     });
+
+    updateQuery += `UPDATE Users SET Balance = Balance - ${totalWinPrizes} WHERE ID = 1; `;
 
     return updateQuery;
   };
 
+  // Need spinner
   const updateHitAndRewardInBettings = async () => {
-    const queryString = await calculateRewards();
+    await calculateRewards().then((queryString) => {
+      if (queryString === "") {
+        alert("✅ Sikeres sorsolás! Nem volt nyertes.");
+        return;
+      }
 
-    if (queryString === "") {
-      alert("✅ Sikeres sorsolás! Nem volt nyertes.");
-      return;
-    }
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("query", queryString);
 
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("query", queryString);
+      const options: RequestInit = {
+        method: "PUT",
+        headers: myHeaders,
+      };
 
-    const options: RequestInit = {
-      method: "PUT",
-      headers: myHeaders,
-    };
-
-    fetch(
-      "https://lottokeeperbackend.johannesdemissi.repl.co/reward_update",
-      options
-    )
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Success:", data);
-        alert("✅ Sikeres sorsolás!");
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        alert("❌ A sorsolás sikertelen volt!");
-      });
-    window.location.reload();
+      fetch(
+        "https://lottokeeperbackend.johannesdemissi.repl.co/multiple_query",
+        options
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Success:", data);
+          alert("✅ Sikeres sorsolás!");
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("❌ A sorsolás sikertelen volt!");
+        });
+    });
   };
 
   useEffect(() => {
@@ -237,8 +249,8 @@ function AdminDrawingPage() {
   return (
     <>
       <Header
-        userName={""}
-        balance={0}
+        userName={userName ?? ""}
+        balance={Number(balance)}
         onButtonClick={() => {
           localStorage.removeItem("user_id");
           navigate("/");

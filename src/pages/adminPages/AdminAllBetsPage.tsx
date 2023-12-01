@@ -5,6 +5,10 @@ import { useNavigate } from "react-router-dom";
 function AdminAllBetsPage() {
   const navigate = useNavigate();
 
+  const params = new URLSearchParams(location.search);
+  const userName = params.get("userName");
+  const balance = params.get("balance");
+
   var bettingDataArray: Array<BettingData> = [];
 
   const [bettingDataList, setBettingDataList] = useState(bettingDataArray);
@@ -45,8 +49,8 @@ function AdminAllBetsPage() {
   return (
     <>
       <Header
-        userName={""}
-        balance={0}
+        userName={userName ?? ""}
+        balance={Number(balance)}
         onButtonClick={() => {
           localStorage.removeItem("user_id");
           navigate("/");

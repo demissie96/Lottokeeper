@@ -155,7 +155,9 @@ function PlayerView({ userId, userName, balance, onButtonClick }: Props) {
           <Card
             heading="Nyereményeim"
             onClickCard={() => {
-              navigate("/nyeremenyeim");
+              navigate(
+                `/nyeremenyeim?userId=${userId}&userName=${userName}&balance=${balance}`
+              );
             }}
           ></Card>
         </div>

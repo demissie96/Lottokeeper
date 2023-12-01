@@ -2,7 +2,13 @@ import { useEffect } from "react";
 import Card from "./Card";
 import { useNavigate } from "react-router-dom";
 
-function AdminView() {
+interface Props {
+  userId: number;
+  userName: string;
+  balance: number;
+}
+
+function AdminView({ userId, userName, balance }: Props) {
   const navigate = useNavigate();
 
   const newCycle = (isAlert: boolean) => {
@@ -69,21 +75,27 @@ function AdminView() {
           heading="Fogadás (Szimuláció)"
           onClickCard={() => {
             console.log("Fogadás (Szimuláció) clicked");
-            navigate("/fogadas-szimulacio");
+            navigate(
+              `/fogadas-szimulacio?userId=${userId}&userName=${userName}&balance=${balance}`
+            );
           }}
         ></Card>
         <Card
           heading="Szelvények"
           onClickCard={() => {
             console.log("Szelvények clicked");
-            navigate("/fogadasok");
+            navigate(
+              `/fogadasok?userId=${userId}&userName=${userName}&balance=${balance}`
+            );
           }}
         ></Card>
         <Card
           heading="Sorsolás"
           onClickCard={() => {
             console.log("Sorsolás clicked");
-            navigate("/sorsolas");
+            navigate(
+              `/sorsolas?userId=${userId}&userName=${userName}&balance=${balance}`
+            );
           }}
         ></Card>
         <Card

@@ -120,7 +120,11 @@ function HomePage() {
             changeUser();
           }}
         />
-        <AdminView />
+        <AdminView
+          userId={user?.ID ?? 0}
+          balance={user?.Balance ?? 0}
+          userName={user?.Name ?? ""}
+        />
       </>
     );
   }
