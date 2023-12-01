@@ -63,43 +63,45 @@ function AdminView() {
   useEffect(() => {}, []);
 
   return (
-    <div className="div_for_cards">
-      <Card
-        heading="Fogadás (Szimuláció)"
-        onClickCard={() => {
-          console.log("Fogadás (Szimuláció) clicked");
-          navigate("/fogadas-szimulacio");
-        }}
-      ></Card>
-      <Card
-        heading="Szelvények"
-        onClickCard={() => {
-          console.log("Szelvények clicked");
-          navigate("/fogadasok");
-        }}
-      ></Card>
-      <Card
-        heading="Sorsolás"
-        onClickCard={() => {
-          console.log("Sorsolás clicked");
-          navigate("/sorsolas");
-        }}
-      ></Card>
-      <Card
-        heading="Új kör"
-        onClickCard={() => {
-          console.log("Új kör clicked");
-          newCycle(true);
-        }}
-      ></Card>
-      <Card
-        heading="Új játék"
-        onClickCard={() => {
-          console.log("Új játék clicked");
-          newCycle(false);
-          newGame();
-        }}
-      ></Card>
+    <div className="center-content">
+      <div className="div_for_cards_admin">
+        <Card
+          heading="Fogadás (Szimuláció)"
+          onClickCard={() => {
+            console.log("Fogadás (Szimuláció) clicked");
+            navigate("/fogadas-szimulacio");
+          }}
+        ></Card>
+        <Card
+          heading="Szelvények"
+          onClickCard={() => {
+            console.log("Szelvények clicked");
+            navigate("/fogadasok");
+          }}
+        ></Card>
+        <Card
+          heading="Sorsolás"
+          onClickCard={() => {
+            console.log("Sorsolás clicked");
+            navigate("/sorsolas");
+          }}
+        ></Card>
+        <Card
+          heading="Új kör"
+          onClickCard={() => {
+            console.log("Új kör clicked");
+            newCycle(true);
+          }}
+        ></Card>
+        <Card
+          heading="Új játék"
+          onClickCard={() => {
+            console.log("Új játék clicked");
+            newCycle(false);
+            newGame();
+          }}
+        ></Card>
+      </div>
     </div>
   );
 }

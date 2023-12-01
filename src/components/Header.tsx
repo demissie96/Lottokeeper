@@ -8,7 +8,7 @@ interface Props {
 
 function Header({ userName, balance, onButtonClick }: Props) {
   return (
-    <nav className="navbar bg-body-tertiary">
+    <nav className="navbar fixed-top bg-body-tertiary">
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
           Lottokeeper

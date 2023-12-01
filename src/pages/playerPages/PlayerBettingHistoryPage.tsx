@@ -67,7 +67,7 @@ function PlayerBettingHistoryPage() {
         }}
       ></Header>
       <br />
-      <h1>Szelvényeim</h1>
+      <h1 className="player-view-div">Szelvényeim</h1>
       <br />
       <ul className="list-group width300">
         {bettingDataList.map((item, index) => (

@@ -53,7 +53,9 @@ function AdminAllBetsPage() {
         }}
       />
       <br />
-      <h1>Szelvények ({bettingDataList.length}db)</h1>
+      <h1 className="player-view-div">
+        Szelvények ({bettingDataList.length}db)
+      </h1>
       <br />
       <ul className="list-group width300">
         {bettingDataList.map((item) => (

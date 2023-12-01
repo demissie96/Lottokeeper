@@ -24,3 +24,14 @@ type WinnerNumbersData = {
   Num_4: number;
   Num_5: number;
 };
+
+type IDHitData = {
+  ID: number;
+  Hit: number;
+};
+
+type IDHitRewardData = {
+  ID: number;
+  Hit: number;
+  Reward: number;
+};

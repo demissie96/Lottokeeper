@@ -134,7 +134,7 @@ function PlayerBettingPage() {
           navigate("/");
         }}
       ></Header>
-      <div>
+      <div className="player-view-div">
         <h1>Tippelj 5 számot</h1>
         <br />
         <div className="form-group width400">

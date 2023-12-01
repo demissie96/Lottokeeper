@@ -1,5 +1,5 @@
 function PlayerPrizesPage() {
-  return <div>PlayerPrizesPage</div>;
+  return <div className="player-view-div">PlayerPrizesPage</div>;
 }
 
 export default PlayerPrizesPage;

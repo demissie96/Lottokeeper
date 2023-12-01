@@ -90,7 +90,7 @@ function AdminBetSimulationPage() {
         }}
       />
       <br />
-      <h1>Fogadás szimuláció</h1>
+      <h1 className="mt-5 player-view-div">Fogadás szimuláció</h1>
       <br />
       <div className="width400">
         <p>Add meg hány szelvényt szeretnél generálni.</p>
@@ -98,7 +98,6 @@ function AdminBetSimulationPage() {
           type="number"
           className="form-control"
           min="1"
-          max="10"
           defaultValue={1}
           onChange={(item) => {
             if (item.target.value === "") {

@@ -3,5 +3,6 @@ h1 {
 }
 
 .player-view-div {
-  margin: 10px;
+  margin-top: 100px;
+  min-width: 400px;
 }

@@ -1,11 +1,37 @@
+.center-content {
+  height: 100vh; /* Use viewport height to ensure it takes the full height of the screen */
+  padding-top: 100px;
+  padding-bottom: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center vertically */
+}
+
 .div_for_cards {
-  height: 80vh;
+  height: 100vh;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   align-content: center;
+}
+
+.div_for_cards_admin {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+/* Media query for mobile view */
+@media (max-width: 480px) {
+  .center-content {
+    padding-top: 580px; /* Adjust padding for mobile */
+    padding-bottom: 40px; /* Adjust padding for mobile */
+  }
 }
 
 .width400 {
