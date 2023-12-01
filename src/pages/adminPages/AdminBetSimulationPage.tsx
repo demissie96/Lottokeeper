@@ -77,16 +77,6 @@ function AdminBetSimulationPage() {
     }
 
     return isSuccess;
-
-    // setLoading(false);
-
-    // if (isSuccess) {
-    //   alert("✅ Sikeres fogadás!");
-    // } else {
-    //   alert("❌ A fogadás sikertelen volt!");
-    // }
-
-    // window.location.reload();
   };
 
   return (

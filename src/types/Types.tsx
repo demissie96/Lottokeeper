@@ -16,3 +16,11 @@ type BettingData = {
   Reward?: number;
   Betting_Date?: number;
 };
+
+type WinnerNumbersData = {
+  Num_1: number;
+  Num_2: number;
+  Num_3: number;
+  Num_4: number;
+  Num_5: number;
+};
