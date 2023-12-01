@@ -11,8 +11,6 @@ function AdminBetSimulationPage() {
 
   const [generateNumber, setGenerateNumber] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [loadingNumber, setLoadingNumber] = useState(1);
-  let loadingNum = 1;
 
   function randomNumber() {
     return Math.floor(Math.random() * (40 - 1) + 1);
