@@ -28,10 +28,12 @@ type WinnerNumbersData = {
 type IDHitData = {
   ID: number;
   Hit: number;
+  User_ID: number;
 };
 
 type IDHitRewardData = {
   ID: number;
   Hit: number;
   Reward: number;
+  User_ID: number;
 };

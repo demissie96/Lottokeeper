@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header";
 import { useState } from "react";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import { generateFiveNumber } from "../../functions/Functions";
 
 function AdminBetSimulationPage() {
   const navigate = useNavigate();
@@ -13,25 +14,14 @@ function AdminBetSimulationPage() {
   const [generateNumber, setGenerateNumber] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  function randomNumber() {
-    return Math.floor(Math.random() * (40 - 1) + 1);
-  }
-
   const generateBets = () => {
     setLoading(true);
-
     let queryString: string = "";
 
     for (let index = 0; index < generateNumber; index++) {
-      const random1 = randomNumber();
-      const random2 = randomNumber();
-      const random3 = randomNumber();
-      const random4 = randomNumber();
-      const random5 = randomNumber();
+      const randomNumList: Array<number> = generateFiveNumber();
 
-      console.log(`${random1} ${random2} ${random3} ${random4} ${random5}`);
-
-      queryString += `INSERT INTO Bettings (User_ID, Num_1, Num_2, Num_3, Num_4, Num_5) VALUES(1, ${random1}, ${random2}, ${random3}, ${random4}, ${random5}); `;
+      queryString += `INSERT INTO Bettings (User_ID, Num_1, Num_2, Num_3, Num_4, Num_5) VALUES(1, ${randomNumList[0]}, ${randomNumList[1]}, ${randomNumList[2]}, ${randomNumList[3]}, ${randomNumList[4]}); `;
       queryString += `UPDATE Users SET Balance = Balance + 500 WHERE ID = 1; `;
     }
 

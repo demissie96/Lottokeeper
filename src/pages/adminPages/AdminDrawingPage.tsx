@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import { generateFiveNumber } from "../../functions/Functions";
 
 function AdminDrawingPage() {
   const [isDataChecked, setIsDataChecked] = useState(false);
@@ -15,22 +16,6 @@ function AdminDrawingPage() {
   const userName = params.get("userName");
   const balance = params.get("balance");
   var newBalance: number = 0;
-
-  // Generate random numbers
-  function randomNumber() {
-    return Math.floor(Math.random() * (40 - 1) + 1);
-  }
-
-  function generateFiveNumber() {
-    let numList: Array<number> = [];
-
-    for (let index = 0; index < 5; index++) {
-      numList.push(randomNumber());
-    }
-
-    winnerNumbersList = numList;
-    setWinnerNumbers(numList);
-  }
 
   // Get winner numbers, get all bettings
   const fetchWinnerNumbers = () => {
@@ -104,7 +89,9 @@ function AdminDrawingPage() {
 
   const saveWinnerNumbersToDB = async () => {
     setLoading(true);
-    generateFiveNumber();
+
+    winnerNumbersList = generateFiveNumber();
+    setWinnerNumbers(winnerNumbersList);
 
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -167,6 +154,7 @@ function AdminDrawingPage() {
       const idHitData: IDHitData = {
         ID: element.ID,
         Hit: hitCount,
+        User_ID: element.User_ID,
       };
 
       idHitList.push(idHitData);
@@ -189,6 +177,7 @@ function AdminDrawingPage() {
       const idHitReward: IDHitRewardData = {
         ID: element.ID,
         Hit: element.Hit,
+        User_ID: element.User_ID,
         Reward: element.Hit > 1 ? element.Hit * hitUnitPrize : 0,
       };
       idHitRewardList.push(idHitReward);
@@ -204,7 +193,9 @@ function AdminDrawingPage() {
 
     idHitRewardList.forEach((element) => {
       updateQuery += `UPDATE Bettings SET Hit = ${element.Hit}, Reward = ${element.Reward} WHERE ID = ${element.ID}; `;
-      updateQuery += `UPDATE Users SET Balance = Balance + ${element.Reward} WHERE ID = ${element.ID}; `;
+      if (element.User_ID !== 1) {
+        updateQuery += `UPDATE Users SET Balance = Balance + ${element.Reward} WHERE ID = ${element.User_ID}; `;
+      }
     });
 
     updateQuery += `UPDATE Users SET Balance = Balance - ${totalWinPrizes} WHERE ID = 1; `;

@@ -58,7 +58,9 @@ function PlayerBettingPage() {
     }
 
     if (selectedNumbersList.length === 5) {
-      selectedNumbersList.sort((n1: any, n2: any) => n1 - n2);
+      selectedNumbersList = selectedNumbersList.sort(
+        (n1: any, n2: any) => n1 - n2
+      );
       setSelectedNumbers(selectedNumbersList);
       console.log(selectedNumbers.length);
       console.log(selectedNumbersList);
