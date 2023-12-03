@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Card from "./Card";
 import { useNavigate } from "react-router-dom";
+import LoadingSpinner from "./LoadingSpinner";
 
 interface Props {
   userId: number;
@@ -9,6 +10,7 @@ interface Props {
 }
 
 function AdminView({ userId, userName, balance }: Props) {
+  const [showSpinner, setShowSpinner] = useState(true);
   const navigate = useNavigate();
 
   const newCycle = (isAlert: boolean) => {
@@ -66,54 +68,64 @@ function AdminView({ userId, userName, balance }: Props) {
       });
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (userId != 0) {
+      setShowSpinner(false);
+    }
+  }, [userId]);
 
   return (
     <div className="center-content">
-      <div className="div_for_cards_admin">
-        <Card
-          heading="Fogadás (Szimuláció)"
-          onClickCard={() => {
-            console.log("Fogadás (Szimuláció) clicked");
-            navigate(
-              `/fogadas-szimulacio?userId=${userId}&userName=${userName}&balance=${balance}`
-            );
-          }}
-        ></Card>
-        <Card
-          heading="Szelvények"
-          onClickCard={() => {
-            console.log("Szelvények clicked");
-            navigate(
-              `/fogadasok?userId=${userId}&userName=${userName}&balance=${balance}`
-            );
-          }}
-        ></Card>
-        <Card
-          heading="Sorsolás"
-          onClickCard={() => {
-            console.log("Sorsolás clicked");
-            navigate(
-              `/sorsolas?userId=${userId}&userName=${userName}&balance=${balance}`
-            );
-          }}
-        ></Card>
-        <Card
-          heading="Új kör"
-          onClickCard={() => {
-            console.log("Új kör clicked");
-            newCycle(true);
-          }}
-        ></Card>
-        <Card
-          heading="Új játék"
-          onClickCard={() => {
-            console.log("Új játék clicked");
-            newCycle(false);
-            newGame();
-          }}
-        ></Card>
-      </div>
+      {showSpinner ? (
+        <div className="center-content">
+          <LoadingSpinner />
+        </div>
+      ) : (
+        <div className="div_for_cards_admin">
+          <Card
+            heading="Fogadás (Szimuláció)"
+            onClickCard={() => {
+              console.log("Fogadás (Szimuláció) clicked");
+              navigate(
+                `/fogadas-szimulacio?userId=${userId}&userName=${userName}&balance=${balance}`
+              );
+            }}
+          ></Card>
+          <Card
+            heading="Szelvények"
+            onClickCard={() => {
+              console.log("Szelvények clicked");
+              navigate(
+                `/fogadasok?userId=${userId}&userName=${userName}&balance=${balance}`
+              );
+            }}
+          ></Card>
+          <Card
+            heading="Sorsolás"
+            onClickCard={() => {
+              console.log("Sorsolás clicked");
+              navigate(
+                `/sorsolas?userId=${userId}&userName=${userName}&balance=${balance}`
+              );
+            }}
+          ></Card>
+          <Card
+            heading="Új kör"
+            onClickCard={() => {
+              console.log("Új kör clicked");
+              newCycle(true);
+            }}
+          ></Card>
+          <Card
+            heading="Új játék"
+            onClickCard={() => {
+              console.log("Új játék clicked");
+              newCycle(false);
+              newGame();
+            }}
+          ></Card>
+        </div>
+      )}
     </div>
   );
 }

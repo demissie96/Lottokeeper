@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import { useNavigate } from "react-router-dom";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 function AdminDrawingPage() {
+  const [isDataChecked, setIsDataChecked] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [winnerNumbers, setWinnerNumbers] = useState<Array<number>>([]);
   let winnerNumbersList: Array<number> = [];
 
@@ -11,6 +14,7 @@ function AdminDrawingPage() {
   const params = new URLSearchParams(location.search);
   const userName = params.get("userName");
   const balance = params.get("balance");
+  var newBalance: number = 0;
 
   // Generate random numbers
   function randomNumber() {
@@ -46,6 +50,9 @@ function AdminDrawingPage() {
 
           setWinnerNumbers(winArray);
         }
+
+        setLoading(false);
+        setIsDataChecked(true);
       });
   };
 
@@ -96,6 +103,7 @@ function AdminDrawingPage() {
   // Save winner numbers
 
   const saveWinnerNumbersToDB = async () => {
+    setLoading(true);
     generateFiveNumber();
 
     const myHeaders = new Headers();
@@ -124,13 +132,11 @@ function AdminDrawingPage() {
       })
       .then((data) => {
         console.log("Success:", data);
-        console.log("✅ Sikeres sorsolás!");
         updateHitAndRewardInBettings();
       })
       .catch((error) => {
         console.error("Error:", error);
         setWinnerNumbers([]);
-        console.log("❌ Sikertelen sorsolás!");
       });
   };
 
@@ -192,6 +198,8 @@ function AdminDrawingPage() {
       }
     });
 
+    newBalance = Number(balance) - totalWinPrizes;
+
     let updateQuery: string = "";
 
     idHitRewardList.forEach((element) => {
@@ -204,7 +212,6 @@ function AdminDrawingPage() {
     return updateQuery;
   };
 
-  // Need spinner
   const updateHitAndRewardInBettings = async () => {
     await calculateRewards().then((queryString) => {
       if (queryString === "") {
@@ -234,9 +241,14 @@ function AdminDrawingPage() {
         .then((data) => {
           console.log("Success:", data);
           alert("✅ Sikeres sorsolás!");
+          navigate(
+            `/sorsolas?userId=1&userName=${userName}&balance=${newBalance}`
+          );
+          window.location.reload();
         })
         .catch((error) => {
           console.error("Error:", error);
+          setLoading(false);
           alert("❌ A sorsolás sikertelen volt!");
         });
     });
@@ -257,32 +269,42 @@ function AdminDrawingPage() {
         }}
       />
       <br />
-      {winnerNumbers.length === 0 ? (
-        <div className="player-view-div">
-          <h1>Sorsolás</h1>
-          <br />
-          <div className="center">
-            <button
-              type="button"
-              className="btn btn-danger"
-              onClick={saveWinnerNumbersToDB}
-            >
-              Sorsolás Indítása
-            </button>
-          </div>
-        </div>
+      {isDataChecked ? (
+        <>
+          {winnerNumbers.length === 0 ? (
+            <div className="player-view-div">
+              <h1>Sorsolás</h1>
+              <br />
+              <div className="center">
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={saveWinnerNumbersToDB}
+                >
+                  Sorsolás Indítása
+                </button>
+              </div>
+            </div>
+          ) : null}
+          {winnerNumbers.length > 0 ? (
+            <div className="player-view-div">
+              <h1>Nyertes számok:</h1>
+              <br />
+              <div className="center">
+                {winnerNumbers.map((number, index) => (
+                  <span key={index} className="number-span m-4 h3">
+                    {number}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ) : null}
+        </>
       ) : null}
-      {winnerNumbers.length > 0 ? (
+
+      {loading ? (
         <div className="player-view-div">
-          <h1>Nyertes számok:</h1>
-          <br />
-          <div className="center">
-            {winnerNumbers.map((number, index) => (
-              <span key={index} className="number-span m-4 h3">
-                {number}
-              </span>
-            ))}
-          </div>
+          <LoadingSpinner />
         </div>
       ) : null}
     </>

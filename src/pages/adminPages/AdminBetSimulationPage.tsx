@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header";
 import { useState } from "react";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 function AdminBetSimulationPage() {
   const navigate = useNavigate();
@@ -15,20 +16,6 @@ function AdminBetSimulationPage() {
   function randomNumber() {
     return Math.floor(Math.random() * (40 - 1) + 1);
   }
-
-  // const generateBetsWrapper = async () => {
-  //   await generateBets().then((response) => {
-  //     setLoading(false);
-
-  //     if (response) {
-  //       alert("✅ Sikeres fogadás!");
-  //     } else {
-  //       alert("❌ A fogadás sikertelen volt!");
-  //     }
-
-  //     window.location.reload();
-  //   });
-  // };
 
   const generateBets = () => {
     setLoading(true);
@@ -46,41 +33,6 @@ function AdminBetSimulationPage() {
 
       queryString += `INSERT INTO Bettings (User_ID, Num_1, Num_2, Num_3, Num_4, Num_5) VALUES(1, ${random1}, ${random2}, ${random3}, ${random4}, ${random5}); `;
       queryString += `UPDATE Users SET Balance = Balance + 500 WHERE ID = 1; `;
-
-      // const myHeaders = new Headers();
-      // myHeaders.append("Content-Type", "application/json");
-      // myHeaders.append("user_id", "1");
-      // myHeaders.append("num1", random1.toString());
-      // myHeaders.append("num2", random2.toString());
-      // myHeaders.append("num3", random3.toString());
-      // myHeaders.append("num4", random4.toString());
-      // myHeaders.append("num5", random5.toString());
-
-      // const options: RequestInit = {
-      //   method: "POST",
-      //   headers: myHeaders,
-      // };
-
-      // await fetch(
-      //   "https://lottokeeperbackend.johannesdemissi.repl.co/newbet",
-      //   options
-      // )
-      //   .then((response) => {
-      //     console.log(response);
-      //     if (!response.ok) {
-      //       throw new Error(`HTTP error! Status: ${response.status}`);
-      //     }
-      //     return response.json();
-      //   })
-      //   .then((data) => {
-      //     console.log("Success:", data);
-      //     loadingNum++;
-      //     setLoadingNumber(loadingNum);
-      //   })
-      //   .catch((error) => {
-      //     console.error("Error:", error);
-      //     isSuccess = false;
-      //   });
     }
 
     const myHeaders = new Headers();
@@ -107,11 +59,17 @@ function AdminBetSimulationPage() {
         console.log("Success:", data);
         setLoading(false);
         alert("✅ Sikeres sorsolás!");
+        let newBalance: number = Number(balance) + 500 * generateNumber;
+        navigate(
+          `/fogadas-szimulacio?userId=1&userName=${userName}&balance=${newBalance}`
+        );
+        window.location.reload();
       })
       .catch((error) => {
         console.error("Error:", error);
         setLoading(false);
         alert("❌ A sorsolás sikertelen volt!");
+        window.location.reload();
       });
   };
 
@@ -145,9 +103,7 @@ function AdminBetSimulationPage() {
         ></input>
         <br />
         {loading ? (
-          <div className="spinner-border" role="status">
-            <span className="visually-hidden">Töltés...</span>
-          </div>
+          <LoadingSpinner />
         ) : (
           <button
             className={

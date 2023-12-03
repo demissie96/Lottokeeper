@@ -26,6 +26,7 @@ function HomePage() {
   const changeUser = () => {
     setUserView(UserView.Nobody);
     deleteLocalStorage();
+    setUserId(null);
   };
 
   const fetchUserData = () => {

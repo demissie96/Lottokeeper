@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import { useNavigate } from "react-router-dom";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 function AdminAllBetsPage() {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ function AdminAllBetsPage() {
   var bettingDataArray: Array<BettingData> = [];
 
   const [bettingDataList, setBettingDataList] = useState(bettingDataArray);
+  const [loading, setLoading] = useState(true);
 
   const fetchAllBettings = () => {
     fetch("https://lottokeeperbackend.johannesdemissi.repl.co/all_bets_list")
@@ -39,6 +41,7 @@ function AdminAllBetsPage() {
         });
 
         setBettingDataList(bettingDataArray);
+        setLoading(false);
       });
   };
 
@@ -58,17 +61,21 @@ function AdminAllBetsPage() {
       />
       <br />
       <h1 className="player-view-div">
-        Szelvények ({bettingDataList.length}db)
+        Szelvények {loading ? null : `(${bettingDataList.length}db)`}
       </h1>
       <br />
-      <ul className="list-group width300">
-        {bettingDataList.map((item) => (
-          <li className="list-group-item" key={item.ID}>
-            ({item.User_ID === 1 ? "Generált" : "Játékos"}): {item.Num_1} -{" "}
-            {item.Num_2} - {item.Num_3} - {item.Num_4} - {item.Num_5}
-          </li>
-        ))}
-      </ul>
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        <ul className="list-group width300">
+          {bettingDataList.map((item) => (
+            <li className="list-group-item" key={item.ID}>
+              ({item.User_ID === 1 ? "Generált" : "Játékos"}): {item.Num_1} -{" "}
+              {item.Num_2} - {item.Num_3} - {item.Num_4} - {item.Num_5}
+            </li>
+          ))}
+        </ul>
+      )}
     </>
   );
 }

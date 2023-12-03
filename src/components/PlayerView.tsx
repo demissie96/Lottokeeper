@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./PlayerView.css";
 import "../types/Types";
 import Card from "./Card";
+import LoadingSpinner from "./LoadingSpinner";
 
 interface Props {
   userId: number;
@@ -16,6 +17,7 @@ function PlayerView({ userId, userName, balance, onButtonClick }: Props) {
   const [userList, setUserList] = useState(userDetailList);
   const [newUserName, setNewUserName] = useState("");
   const [isUserSelected, setIsUserSelected] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(true);
 
   const navigate = useNavigate();
 
@@ -26,6 +28,7 @@ function PlayerView({ userId, userName, balance, onButtonClick }: Props) {
       })
       .then((data) => {
         setUserList(data.slice(1));
+        setShowSpinner(false);
       });
   };
 
@@ -33,8 +36,12 @@ function PlayerView({ userId, userName, balance, onButtonClick }: Props) {
     if (userId > 0) {
       setIsUserSelected(true);
       console.log(userId);
+      setShowSpinner(false);
     } else {
-      fetchData();
+      if (localStorage.getItem("user_id") === null) {
+        fetchData();
+      }
+
       console.log(userId);
     }
   }, [userId]);
@@ -86,81 +93,89 @@ function PlayerView({ userId, userName, balance, onButtonClick }: Props) {
 
   return (
     <>
-      {isUserSelected === false && (
-        <div className="player-view-div">
-          <h1>Új játékos</h1>
-          <br></br>
-          <form className="width400 ">
-            <div className="mb-3">
-              <label htmlFor="nameInput" className="form-label">
-                Teljes Név
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                id="nameInput"
-                name="nameInput"
-                onChange={handleInputChange}
-              ></input>
-              <br />
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={createPlayer}
-              >
-                Létrehozás
-              </button>
-            </div>
-          </form>
-          <br></br>
-          {userList.length > 0 && (
+      {showSpinner ? (
+        <div className="center-content">
+          <LoadingSpinner />
+        </div>
+      ) : (
+        <>
+          {isUserSelected === false && (
             <div className="player-view-div">
-              <h1>Válassz játékost</h1>
-              <ul className="list-group width400">
-                {userList.map((item) => (
-                  <li
-                    className="list-group-item"
-                    key={item.ID}
-                    onClick={() => {
-                      console.log(item.Name + " + " + item.ID);
-                      onButtonClick(item);
-                    }}
+              <h1>Új játékos</h1>
+              <br></br>
+              <form className="width400 ">
+                <div className="mb-3">
+                  <label htmlFor="nameInput" className="form-label">
+                    Teljes Név
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="nameInput"
+                    name="nameInput"
+                    onChange={handleInputChange}
+                  ></input>
+                  <br />
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={createPlayer}
                   >
-                    {item.Name}
-                  </li>
-                ))}
-              </ul>
+                    Létrehozás
+                  </button>
+                </div>
+              </form>
+              <br></br>
+              {userList.length > 0 && (
+                <div className="player-view-div">
+                  <h1>Válassz játékost</h1>
+                  <ul className="list-group width400">
+                    {userList.map((item) => (
+                      <li
+                        className="list-group-item"
+                        key={item.ID}
+                        onClick={() => {
+                          console.log(item.Name + " + " + item.ID);
+                          onButtonClick(item);
+                        }}
+                      >
+                        {item.Name}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           )}
-        </div>
-      )}
-      {isUserSelected && (
-        <div className="div_for_cards">
-          <Card
-            heading="Fogadás"
-            onClickCard={() => {
-              navigate(
-                `/fogadasaim?userId=${userId}&userName=${userName}&balance=${balance}`
-              );
-            }}
-          ></Card>
-          <Card
-            heading="Szelvényeim"
-            onClickCard={() => {
-              navigate(
-                `/szelvenyeim?userId=${userId}&userName=${userName}&balance=${balance}`
-              );
-            }}
-          ></Card>
-          <Card
-            heading="Nyereményeim"
-            onClickCard={() => {
-              navigate(
-                `/nyeremenyeim?userId=${userId}&userName=${userName}&balance=${balance}`
-              );
-            }}
-          ></Card>
-        </div>
+          {isUserSelected && (
+            <div className="div_for_cards">
+              <Card
+                heading="Fogadás"
+                onClickCard={() => {
+                  navigate(
+                    `/fogadasaim?userId=${userId}&userName=${userName}&balance=${balance}`
+                  );
+                }}
+              ></Card>
+              <Card
+                heading="Szelvényeim"
+                onClickCard={() => {
+                  navigate(
+                    `/szelvenyeim?userId=${userId}&userName=${userName}&balance=${balance}`
+                  );
+                }}
+              ></Card>
+              <Card
+                heading="Nyereményeim"
+                onClickCard={() => {
+                  navigate(
+                    `/nyeremenyeim?userId=${userId}&userName=${userName}&balance=${balance}`
+                  );
+                }}
+              ></Card>
+            </div>
+          )}
+        </>
       )}
     </>
   );
