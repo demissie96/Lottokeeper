@@ -35,14 +35,11 @@ function PlayerView({ userId, userName, balance, onButtonClick }: Props) {
   useEffect(() => {
     if (userId > 0) {
       setIsUserSelected(true);
-      console.log(userId);
       setShowSpinner(false);
     } else {
       if (localStorage.getItem("user_id") === null) {
         fetchData();
       }
-
-      console.log(userId);
     }
   }, [userId]);
 
@@ -51,8 +48,6 @@ function PlayerView({ userId, userName, balance, onButtonClick }: Props) {
   };
   const createPlayer = () => {
     if (newUserName != "") {
-      console.log("Create: " + newUserName);
-
       const input = document.getElementById("nameInput") as HTMLInputElement;
       if (input != null) {
         input.value = "";
@@ -135,7 +130,6 @@ function PlayerView({ userId, userName, balance, onButtonClick }: Props) {
                         className="list-group-item"
                         key={item.ID}
                         onClick={() => {
-                          console.log(item.Name + " + " + item.ID);
                           onButtonClick(item);
                         }}
                       >

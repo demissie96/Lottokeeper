@@ -48,9 +48,6 @@ function PlayerBettingPage() {
   };
 
   const checkBetting = (item: any, num: Number) => {
-    console.log("clicked" + num);
-    console.log("Is checked? : " + item.target.checked);
-
     if (item.target.checked === true) {
       selectedNumbersList.push(num);
     } else if (item.target.checked === false) {
@@ -63,12 +60,8 @@ function PlayerBettingPage() {
         (n1: any, n2: any) => n1 - n2
       );
       setSelectedNumbers(selectedNumbersList);
-      console.log(selectedNumbers.length);
-      console.log(selectedNumbersList);
     } else {
       setSelectedNumbers([]);
-      console.log(selectedNumbers.length);
-      console.log(selectedNumbersList);
     }
   };
 

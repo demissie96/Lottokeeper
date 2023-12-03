@@ -3,8 +3,10 @@ import Header from "../../components/Header";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { generateFiveNumber } from "../../functions/Functions";
+import AdminStatisticsTable from "../../components/AdminStatisticsTable";
 
 function AdminDrawingPage() {
+  const [allBetsData, setAllBetsData] = useState<Array<BettingData>>([]);
   const [isDataChecked, setIsDataChecked] = useState(false);
   const [loading, setLoading] = useState(true);
   const [winnerNumbers, setWinnerNumbers] = useState<Array<number>>([]);
@@ -34,6 +36,7 @@ function AdminDrawingPage() {
           ];
 
           setWinnerNumbers(winArray);
+          fetchAllBettings();
         }
 
         setLoading(false);
@@ -73,6 +76,7 @@ function AdminDrawingPage() {
           allBettingsArray.push(bettingType);
         });
 
+        setAllBetsData(allBettingsArray);
         return allBettingsArray;
       } else {
         // Handle the case when there is no data
@@ -277,6 +281,15 @@ function AdminDrawingPage() {
               </div>
             </div>
           ) : null}
+        </>
+      ) : null}
+
+      {loading ? (
+        <div className="player-view-div">
+          <LoadingSpinner />
+        </div>
+      ) : (
+        <>
           {winnerNumbers.length > 0 ? (
             <div className="player-view-div">
               <h1>Nyertes számok:</h1>
@@ -288,16 +301,12 @@ function AdminDrawingPage() {
                   </span>
                 ))}
               </div>
+              <br />
+              <AdminStatisticsTable bettingData={allBetsData} />
             </div>
           ) : null}
         </>
-      ) : null}
-
-      {loading ? (
-        <div className="player-view-div">
-          <LoadingSpinner />
-        </div>
-      ) : null}
+      )}
     </>
   );
 }

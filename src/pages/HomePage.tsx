@@ -53,14 +53,10 @@ function HomePage() {
 
   useEffect(() => {
     if (userId === null) {
-      console.log("No Selected User - " + userId);
     } else if (userId === "1") {
-      // fetchUserData();
       setUserView(UserView.Admin);
       fetchUserData();
     } else {
-      // fetchUserData();
-      console.log("Player selected - " + userId);
       setUserView(UserView.Player);
       fetchUserData();
     }

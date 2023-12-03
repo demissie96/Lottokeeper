@@ -81,7 +81,7 @@ function AdminAllBetsPage() {
       ) : (
         <>
           {canPlay ? (
-            <ul className="list-group width300">
+            <ul className="list-group width300 mb-4">
               {bettingDataList.map((item) => (
                 <li className="list-group-item" key={item.ID}>
                   ({item.User_ID === 1 ? "Generált" : "Játékos"}): {item.Num_1}{" "}

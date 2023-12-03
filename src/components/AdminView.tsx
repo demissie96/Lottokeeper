@@ -85,7 +85,6 @@ function AdminView({ userId, userName, balance }: Props) {
           <Card
             heading="Fogadás (Szimuláció)"
             onClickCard={() => {
-              console.log("Fogadás (Szimuláció) clicked");
               navigate(
                 `/fogadas-szimulacio?userId=${userId}&userName=${userName}&balance=${balance}`
               );
@@ -94,7 +93,6 @@ function AdminView({ userId, userName, balance }: Props) {
           <Card
             heading="Szelvények"
             onClickCard={() => {
-              console.log("Szelvények clicked");
               navigate(
                 `/fogadasok?userId=${userId}&userName=${userName}&balance=${balance}`
               );
@@ -103,7 +101,6 @@ function AdminView({ userId, userName, balance }: Props) {
           <Card
             heading="Sorsolás"
             onClickCard={() => {
-              console.log("Sorsolás clicked");
               navigate(
                 `/sorsolas?userId=${userId}&userName=${userName}&balance=${balance}`
               );
@@ -112,14 +109,12 @@ function AdminView({ userId, userName, balance }: Props) {
           <Card
             heading="Új kör"
             onClickCard={() => {
-              console.log("Új kör clicked");
               newCycle(true);
             }}
           ></Card>
           <Card
             heading="Új játék"
             onClickCard={() => {
-              console.log("Új játék clicked");
               newCycle(false);
               newGame();
             }}
