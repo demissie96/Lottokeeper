@@ -19,3 +19,24 @@ export function generateFiveNumber(): Array<number> {
 
   return randomNumList;
 }
+
+export async function canYouBet(): Promise<boolean> {
+  try {
+    const response = await fetch(
+      "https://lottokeeperbackend.johannesdemissi.repl.co/winner_numbers"
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch winner numbers. Status: ${response.status}`
+      );
+    }
+
+    const data = await response.json();
+
+    return data.length === 0;
+  } catch (error) {
+    console.error("Error checking if you can bet:", error);
+    throw error; // Rethrow the error to let the calling code handle it
+  }
+}

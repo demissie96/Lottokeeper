@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LoadingSpinner from "../../components/LoadingSpinner";
-import { generateFiveNumber } from "../../functions/Functions";
+import { canYouBet, generateFiveNumber } from "../../functions/Functions";
 
 function AdminBetSimulationPage() {
   const navigate = useNavigate();
@@ -12,7 +12,8 @@ function AdminBetSimulationPage() {
   const balance = params.get("balance");
 
   const [generateNumber, setGenerateNumber] = useState(1);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [canPlay, setCanPlay] = useState(false);
 
   const generateBets = () => {
     setLoading(true);
@@ -63,6 +64,17 @@ function AdminBetSimulationPage() {
       });
   };
 
+  useEffect(() => {
+    canYouBet().then((result) => {
+      if (result) {
+        setCanPlay(true);
+      } else {
+        setCanPlay(false);
+      }
+      setLoading(false);
+    });
+  }, []);
+
   return (
     <>
       <Header
@@ -74,39 +86,56 @@ function AdminBetSimulationPage() {
         }}
       />
       <br />
-      <h1 className="mt-5 player-view-div">Fogadás szimuláció</h1>
-      <br />
-      <div className="width400">
-        <p>Add meg hány szelvényt szeretnél generálni.</p>
-        <input
-          type="number"
-          className="form-control"
-          min="1"
-          defaultValue={1}
-          onChange={(item) => {
-            if (item.target.value === "") {
-              setGenerateNumber(0);
-            } else {
-              setGenerateNumber(Number(item.target.value));
-            }
-          }}
-        ></input>
-        <br />
-        {loading ? (
+      {loading ? (
+        <div className="player-view-div">
           <LoadingSpinner />
-        ) : (
-          <button
-            className={
-              generateNumber === 0
-                ? "btn btn-primary disabled"
-                : "btn btn-primary"
-            }
-            onClick={generateBets}
-          >
-            Generálás
-          </button>
-        )}
-      </div>
+        </div>
+      ) : (
+        <>
+          {canPlay ? (
+            <>
+              <h1 className="mt-5 player-view-div">Fogadás szimuláció</h1>
+              <br />
+              <div className="width400">
+                <p>Add meg hány szelvényt szeretnél generálni.</p>
+                <input
+                  type="number"
+                  className="form-control"
+                  min="1"
+                  defaultValue={1}
+                  onChange={(item) => {
+                    if (item.target.value === "") {
+                      setGenerateNumber(0);
+                    } else {
+                      setGenerateNumber(Number(item.target.value));
+                    }
+                  }}
+                ></input>
+                <br />
+                {loading ? (
+                  <LoadingSpinner />
+                ) : (
+                  <button
+                    className={
+                      generateNumber === 0
+                        ? "btn btn-primary disabled"
+                        : "btn btn-primary"
+                    }
+                    onClick={generateBets}
+                  >
+                    Generálás
+                  </button>
+                )}
+              </div>
+            </>
+          ) : (
+            <div className="player-view-div width400">
+              <h3 className="mb-4">Már megvolt a sorsolás.</h3>
+              <p>Indíts új kört vagy játékot, hogy tudj fogadást szimulálni.</p>
+            </div>
+          )}
+        </>
+      )}
     </>
   );
 }

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import { useLocation, useNavigate } from "react-router-dom";
+import { canYouBet } from "../../functions/Functions";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 let selectedNumbersList: Number[] = [];
 
@@ -15,6 +17,8 @@ function PlayerBettingPage() {
 
   const [selectedNumbers, setSelectedNumbers] = useState(selectedNumbersList);
   const [userBalance, setUserBalance] = useState(balance);
+  const [canPlay, setCanPlay] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const generateCheckboxes = () => {
     const checkboxes = [];
@@ -33,9 +37,6 @@ function PlayerBettingPage() {
           <label
             className="btn btn-outline-success number-checkbox mt-4"
             htmlFor={`checkbox-${i}`}
-            onClick={() => {
-              // checkBetting(i);
-            }}
           >
             {i}
           </label>
@@ -124,6 +125,14 @@ function PlayerBettingPage() {
 
   useEffect(() => {
     selectedNumbersList = [];
+    canYouBet().then((result) => {
+      if (result) {
+        setCanPlay(true);
+      } else {
+        setCanPlay(false);
+      }
+      setLoading(false);
+    });
   }, []);
 
   return (
@@ -136,33 +145,49 @@ function PlayerBettingPage() {
           navigate("/");
         }}
       ></Header>
-      <div className="player-view-div">
-        <h1>Tippelj 5 számot</h1>
-        <br />
-        <div className="form-group width400">
-          {generateCheckboxes().map((checkbox, index) => (
-            <React.Fragment key={index}>
-              {checkbox}
-              {(index + 1) % 6 === 0 && <br />}{" "}
-              {/* Start a new line after every 6 checkboxes */}
-            </React.Fragment>
-          ))}
+      {loading ? (
+        <div className="player-view-div">
+          <LoadingSpinner />
         </div>
-        <br />
-        <div className="text-center mt-5">
-          <button
-            type="button"
-            className={
-              selectedNumbers.length === 0
-                ? "btn btn-primary disabled"
-                : "btn btn-primary"
-            }
-            onClick={takeABet}
-          >
-            Fogadás
-          </button>
-        </div>
-      </div>
+      ) : (
+        <>
+          {canPlay ? (
+            <div className="player-view-div">
+              <h1>Tippelj 5 számot</h1>
+              <br />
+              <div className="form-group width400">
+                {generateCheckboxes().map((checkbox, index) => (
+                  <React.Fragment key={index}>
+                    {checkbox}
+                    {(index + 1) % 6 === 0 && <br />}{" "}
+                    {/* Start a new line after every 6 checkboxes */}
+                  </React.Fragment>
+                ))}
+              </div>
+              <br />
+              <div className="text-center mt-5">
+                <button
+                  type="button"
+                  className={
+                    selectedNumbers.length === 0
+                      ? "btn btn-primary disabled"
+                      : "btn btn-primary"
+                  }
+                  onClick={takeABet}
+                >
+                  Fogadás
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="player-view-div width400">
+              <h3 className="mb-4">Már megvolt a sorsolás.</h3>
+
+              <p>Az üzemeltetőnek új kört kell indítania, hogy fogadhass.</p>
+            </div>
+          )}
+        </>
+      )}
     </>
   );
 }
