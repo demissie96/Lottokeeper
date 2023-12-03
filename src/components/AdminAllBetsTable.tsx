@@ -11,13 +11,12 @@ function AdminAllBetsTable({ bettingData }: Props) {
   const [isAscendingReward, setIsAscendingReward] = useState(false);
 
   function organizePlayer() {
-    let sortedData: Array<BettingData>;
     if (isAscendingPlayer) {
-      sortedData = bettingData.sort(
+      bettingData = bettingData.sort(
         (a: BettingData, b: BettingData) => a.User_ID! - b.User_ID!
       );
     } else {
-      sortedData = bettingData.sort(
+      bettingData = bettingData.sort(
         (a: BettingData, b: BettingData) => b.User_ID! - a.User_ID!
       );
     }
@@ -25,13 +24,12 @@ function AdminAllBetsTable({ bettingData }: Props) {
   }
 
   function organizeHits() {
-    let sortedData: Array<BettingData>;
     if (isAscendingHit) {
-      sortedData = bettingData.sort(
+      bettingData = bettingData.sort(
         (a: BettingData, b: BettingData) => a.Hit! - b.Hit!
       );
     } else {
-      sortedData = bettingData.sort(
+      bettingData = bettingData.sort(
         (a: BettingData, b: BettingData) => b.Hit! - a.Hit!
       );
     }
@@ -39,13 +37,12 @@ function AdminAllBetsTable({ bettingData }: Props) {
   }
 
   function organizeReward() {
-    let sortedData: Array<BettingData>;
     if (isAscendingReward) {
-      sortedData = bettingData.sort(
+      bettingData = bettingData.sort(
         (a: BettingData, b: BettingData) => a.Reward! - b.Reward!
       );
     } else {
-      sortedData = bettingData.sort(
+      bettingData = bettingData.sort(
         (a: BettingData, b: BettingData) => b.Reward! - a.Reward!
       );
     }

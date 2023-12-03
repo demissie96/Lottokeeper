@@ -16,7 +16,7 @@ function AdminStatisticsTable({ bettingData }: Props) {
     (data) => data.Hit === 2
   ).length;
   const countOfHits0: number = bettingData.filter(
-    (data) => data.Hit === 0
+    (data) => data.Hit === 0 || data.Hit === 1
   ).length;
 
   const prizePerHits5: number =

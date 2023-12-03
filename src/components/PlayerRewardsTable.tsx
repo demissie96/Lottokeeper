@@ -19,13 +19,12 @@ function PlayerRewardsTable({
   const [isAscending, setIsAscending] = useState(false);
 
   function organizeHits() {
-    let sortedData: Array<BettingData>;
     if (isAscending) {
-      sortedData = myBettingData.sort(
+      myBettingData = myBettingData.sort(
         (a: BettingData, b: BettingData) => a.Hit! - b.Hit!
       );
     } else {
-      sortedData = myBettingData.sort(
+      myBettingData = myBettingData.sort(
         (a: BettingData, b: BettingData) => b.Hit! - a.Hit!
       );
     }
